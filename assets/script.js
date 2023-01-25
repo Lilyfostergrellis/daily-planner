@@ -26,6 +26,21 @@ $(document).ready(function(){
         return textDataEl.addClass(colorClass);
     }
     
+     function createSaveBtnEl(hour){
+        var btnContainer = $('<td>').addClass('saveBtn').css({width:'8%'}).attr('type', 'button');
+        var btn = $('<i class="fas fa-save"></i>');
+        //function to generate save buttons
+        
+        btn.click(function(){
+            var scheduledItem = $(this).parent().siblings('textarea').val()
+            storeScheduledItem(hour, scheduledItem)
+            //on the click of the save icon the text input is stored in the local storage
+        });
+
+    
+        return btnContainer.append(btn)
+        //appends
+    }
 
 
 }) 
