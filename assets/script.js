@@ -42,5 +42,58 @@ $(document).ready(function(){
         //appends
     }
 
+    function createRowEl(hour, colorClass){
+        var rowEl = $('<tr>').addClass('row');
+        var timeDataEl = createTimeDataEl(hour);
+        var textDataEl = createTextDataEl(colorClass);
+        var saveBtnEl = createSaveBtnEl(hour);
+        
+        textDataEl.val(getScheduledItemByHour(hour))
+        //retrieves 'saved' user input from their local storage
+
+        rowEl.append(timeDataEl);
+        rowEl.append(textDataEl);
+        rowEl.append(saveBtnEl);
+    
+        return rowEl;
+    }
+    
+    function convertStringHourToMoment(hour){
+        return moment(hour, "HA")
+    }
+    
+    function getColorClass(hour){
+        var currentHour = convertStringHourToMoment(moment().format('HA'));
+        var hour = convertStringHourToMoment(hour); //"1PM" -> {date: ...13:00:00, ..., ..}
+
+        if (hour.isBefore(currentHour)){
+            // if hour passed to function is before the current hour
+            return "past"
+        }
+        
+        if (hour.isAfter(currentHour)){
+            // if the hour passed to function is ahead of the current hour
+            return "future"
+        } 
+
+        // if the hour passed to the function is the same as current hour
+        return "present"
+    }
+    
+    function createTable(){
+        var tableEl = $('<table>').addClass('table col-12');
+    
+        for (let hour of WORKING_HOURS) {
+            var colorClass = getColorClass(hour)
+            var rowEl = createRowEl(hour, colorClass);
+            tableEl.append(rowEl);  
+        }
+    
+        return tableEl;
+    }
+    
+    // Calling and appending the createTable function that creates the table.
+    $('.container').append(createTable());
+
 
 }) 
